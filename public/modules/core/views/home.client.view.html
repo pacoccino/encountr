@@ -1,0 +1,26 @@
+<section data-ng-controller="HomeController">
+	<h1>Rencontrez des gens près de vous !</h1>
+	
+	<div class="row">
+	    <div class="col-md-2">
+	        <img class="profile-picture" ng-src="{{authentication.user.profilePicture}}"/>
+	    </div>
+	    <div class="col-md-8">
+	        <strong><span data-ng-bind="authentication.user.displayName"></span></strong><br/>
+	        <a href="/#!/settings/profile">Modifier profil</a>
+	    </div>
+	    <div class="col-md-2">
+	        
+	        <form ng-submit="toggleAvailability()">
+               <button class="btn" ng-class="authentication.user.available == 'Disponible' ? 'btn-success' : 'btn-danger'" type="submit">{{authentication.user.available}}</button>
+            </form>
+	    </div>
+	</div>
+	
+	
+	<br/><br/>
+	<p>Liste des gens aux alentours :</p>
+	<list>
+	    <ul class="lit-item" data-ng-repeat="user in userList">{{user.displayName}}</ul>
+	</list>
+</section>

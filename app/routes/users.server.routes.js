@@ -14,10 +14,14 @@ module.exports = function(app) {
 	app.route('/users')
 		.get(users.publicList)
 		.put(users.update);
+	app.route('/users/:id')
+		.get(users.publicList);
 	app.route('/users/accounts').delete(users.removeOAuthProvider);
 	
 	app.route('/users/toggleAvailability')
 		.put(users.toggleAvailability);
+	app.route('/users/updatePosition')
+		.put(users.updatePosition);
 	
 
 	// Setting up the users password api

@@ -1,0 +1,43 @@
+<section data-ng-controller="PublicProfileController">
+	<h1>Meet other travelers around the world !</h1>
+	
+	
+<div>
+	<div class="row">
+	    <div class="col-md-2">
+	    	<div class="profile-picture-div">
+	    	  <img class="profile-picture-img" ng-src="{{user.profilePicture}}"/>
+	    	</div>
+	    </div>
+	    <div class="col-md-8">
+	        <strong><span data-ng-bind="user.displayName"></span></strong><br/>
+	        <form class="form-group has-warning">
+	        	<label for="position"  class="control-label">His position :</label>
+	        	<div class="input-group">
+	        		<input type="text" id="position" class="form-control" placeHolder="No position set yet" data-ng-model="positionString" disabled></input>
+        		</div>
+	        </form>
+	        
+	    </div>
+	    <div class="col-md-2">
+           <button class="btn" ng-class="user.available ? 'btn-success' : 'btn-danger'" disabled>{{user.available ? 'Available' : 'Unavailable'}}</button>
+	    </div>
+	</div>
+	<br/><br/>
+	
+	<div class="map-area">
+		<h2>Position :</h2>
+		<ui-gmap-google-map center='user.actualPosition' zoom='map.zoom'>
+			<ui-gmap-marker
+	        	idKey='user._id'
+	    		coords='user.actualPosition'
+	    		options='{title:user.displayName}'>
+			</ui-gmap-marker>
+		</ui-gmap-google-map>
+	</div>
+	
+</div>
+<div>
+	Please connect.
+</div>
+</section>

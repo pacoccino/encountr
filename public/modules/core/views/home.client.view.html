@@ -1,26 +1,65 @@
 <section data-ng-controller="HomeController">
-	<h1>Rencontrez des gens près de vous !</h1>
+	<h1>Meet other travelers around the world !</h1>
 	
+	
+<div data-ng-show="authentication.user">
 	<div class="row">
 	    <div class="col-md-2">
-	        <img class="profile-picture" ng-src="{{authentication.user.profilePicture}}"/>
+	    	<div class="profile-picture-div">
+	    	  <img class="profile-picture-img" ng-src="{{authentication.user.profilePicture}}"/>
+	    	</div>
 	    </div>
 	    <div class="col-md-8">
 	        <strong><span data-ng-bind="authentication.user.displayName"></span></strong><br/>
-	        <a href="/#!/settings/profile">Modifier profil</a>
+	        <a href="/#!/settings/profile">Edit profile</a><br/><br/>
+	        <form class="form-group has-warning">
+	        	<label for="position"  class="control-label">My position :</label>
+	        	<div class="input-group">
+	        		<input type="text" id="position" class="form-control" placeHolder="No position set yet" data-ng-model="positionString"></input>
+	        		<span class="input-group-btn">
+	        			<button type="button" class="btn btn-warning" ng-click="setPos()">Set</button>
+	        		</span>
+        		</div>
+	        </form>
+	        
 	    </div>
 	    <div class="col-md-2">
 	        
 	        <form ng-submit="toggleAvailability()">
-               <button class="btn" ng-class="authentication.user.available == 'Disponible' ? 'btn-success' : 'btn-danger'" type="submit">{{authentication.user.available}}</button>
+               <button class="btn" ng-class="authentication.user.available ? 'btn-success' : 'btn-danger'" type="submit" ng-bind="authentication.user.available ? 'Available' : 'Unavailable'"></button>
             </form>
 	    </div>
 	</div>
 	
 	
 	<br/><br/>
-	<p>Liste des gens aux alentours :</p>
-	<list>
-	    <ul class="lit-item" data-ng-repeat="user in userList">{{user.displayName}}</ul>
-	</list>
+     <button type="button" class="btn btn-default" aria-label="Refresh" ng-click="reloadList()">
+  		<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+	</button> 
+	
+	<h2>Map of available people :</h2>
+	<div>
+		<div class="col-md-8">
+			<div class="map-area">
+				<ui-gmap-google-map center='map.center' zoom='map.zoom'>
+					<ui-gmap-marker ng-repeat="user in userList | filter: { available: true }"
+			        	idKey='user._id'
+			    		coords='user.actualPosition'
+			    		options='{title:user.displayName}'>
+					</ui-gmap-marker>
+				</ui-gmap-google-map>
+			</div>
+		</div>
+		<div class="col-md-4">
+		    <h4>List of people around :</h4>
+			<ul>
+			    <li data-ng-repeat="user in userList"><a ng-href="/#!/public_profile/{{user._id}}">{{user.displayName}}</a> <em>({{user.available ? 'Available' : 'Unavailable'}})</em></li>
+			</ul>
+		</div>
+    </div>
+	
+</div>
+<div data-ng-hide="authentication.user">
+	Please connect.
+</div>
 </section>

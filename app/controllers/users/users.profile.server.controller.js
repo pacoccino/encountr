@@ -49,23 +49,18 @@ exports.update = function(req, res) {
 };
 
 /**
- * Update user details
+ * Change availability
  */
 exports.toggleAvailability = function(req, res) {
 	// Init Variables
 	var user = req.user;
-	var message = null;
 
 	// For security measurement we remove the roles from the req.body object
 	delete req.body.roles;
 
 	if (user) {
 	
-		if(user.available == 'Disponible')
-			user.available = 'Indisponible';
-		else
-			user.available = 'Disponible';
-		
+		user.available = !user.available;
 		user.save(function(err) {
 			if (err) {
 				return res.status(400).send({
@@ -76,7 +71,40 @@ exports.toggleAvailability = function(req, res) {
 					if (err) {
 						res.status(400).send(err);
 					} else {
-						res.json(user);
+						res.json(user.available);
+					}
+				});
+			}
+		});
+	} else {
+		res.status(400).send({
+			message: 'User is not signed in'
+		});
+	}
+};
+/**
+ * Update user position
+ */
+exports.updatePosition = function(req, res) {
+	// Init Variables
+	var user = req.user;
+
+	// For security measurement we remove the roles from the req.body object
+	delete req.body.roles;
+
+	if (user) {
+		user.actualPosition = req.body.position;
+		user.save(function(err) {
+			if (err) {
+				return res.status(400).send({
+					message: errorHandler.getErrorMessage(err)
+				});
+			} else {
+				req.login(user, function(err) {
+					if (err) {
+						res.status(400).send(err);
+					} else {
+						res.json(user.actualPosition);
 					}
 				});
 			}

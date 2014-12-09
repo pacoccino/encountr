@@ -65,12 +65,12 @@ var UserSchema = new Schema({
 		default:''
 	},
 	actualPosition: {
-		type: String,
-		default:''
+		latitude: { type: String, default:'0' },
+		longitude: { type: String, default:'0' }
 	},
 	available: {
-		type: String,
-		default:'Disponible'
+		type: Boolean,
+		default:true
 	},
 	profilePicture: {
 		type: String,

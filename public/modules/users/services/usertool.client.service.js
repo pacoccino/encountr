@@ -18,7 +18,6 @@ angular.module('users').factory('UserTool', ['$http',
 			var LatLng = pos.split(',');
 			var Lat = parseFloat(LatLng[0]);
 			var Lng = parseFloat(LatLng[1]);
-			console.log(Lat + ',' + Lng);
 			var data = {
 				position : { latitude :Lat, longitude: Lng }
 			};

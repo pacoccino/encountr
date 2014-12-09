@@ -6,10 +6,13 @@ angular.module('core').controller('PublicProfileController', ['$scope', '$stateP
 		// This provides Authentication context.
 		$scope.userId = $stateParams.id;
 		
+		$scope.coordToString = function(stat) {
+			return stat.latitude + ',' + stat.longitude;
+		};
+		
 		$http.get('users/'+ $stateParams.id).then(function(res) {
-			console.log("caca");
-			console.log(res.data[0]);
 			$scope.user = res.data[0];
+			$scope.positionString = $scope.coordToString($scope.user.actualPosition);
 		});
 		
 		$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };

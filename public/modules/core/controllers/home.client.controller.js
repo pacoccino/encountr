@@ -1,8 +1,8 @@
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', '$http', 'Authentication', 'Users', 'UserTool',
-	function($scope, $http, Authentication, Users, UserTool) {
+angular.module('core').controller('HomeController', ['$scope', '$http', 'Authentication', 'Users', 'UserTool', 'uiGmapGoogleMapApi',
+	function($scope, $http, Authentication, Users, UserTool, uiGmapGoogleMapApi) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
 		
@@ -37,6 +37,10 @@ angular.module('core').controller('HomeController', ['$scope', '$http', 'Authent
 				$scope.reloadList();
 			});
 		};
+
+		uiGmapGoogleMapApi.then(function(maps) {
+
+    	});
 
 	}
 ]);

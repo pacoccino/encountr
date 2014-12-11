@@ -10,7 +10,7 @@ module.exports = function(grunt) {
 		clientCSS: ['public/modules/**/*.css'],
 		mochaTests: ['app/tests/**/*.js']
 	};
-
+	
 	// Project Configuration
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -139,6 +139,13 @@ module.exports = function(grunt) {
 			unit: {
 				configFile: 'karma.conf.js'
 			}
+		},
+		modulusdeploy: {
+			stage: {
+		      options: {
+		          project: 'my-site-stage'
+		      }
+			}
 		}
 	});
 
@@ -174,4 +181,6 @@ module.exports = function(grunt) {
 
 	// Test task.
 	grunt.registerTask('test', ['env:test', 'mochaTest', 'karma:unit']);
+	
+	grunt.registerTask('heroku', ['autoprefixer', 'imagemin']);
 };

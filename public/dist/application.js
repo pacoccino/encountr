@@ -4,7 +4,7 @@
 var ApplicationConfiguration = (function() {
 	// Init module configuration options
 	var applicationModuleName = 'mean';
-	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils'];
+	var applicationModuleVendorDependencies = ['ngResource', 'ngAnimate', 'ui.router', 'ui.bootstrap', 'ui.utils', 'uiGmapgoogle-maps'];
 
 	// Add a new vertical module
 	var registerModule = function(moduleName, dependencies) {
@@ -49,12 +49,19 @@ ApplicationConfiguration.registerModule('articles');
 
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('core');
+
+console.log('core loaded');
+'use strict';
+
+// Use Applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('parties');
+console.log('party loaded');
 'use strict';
 
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');
 'use strict';
-
+/*
 // Configuring the Articles module
 angular.module('articles').run(['Menus',
 	function(Menus) {
@@ -63,7 +70,7 @@ angular.module('articles').run(['Menus',
 		Menus.addSubMenuItem('topbar', 'articles', 'List Articles', 'articles');
 		Menus.addSubMenuItem('topbar', 'articles', 'New Article', 'articles/create');
 	}
-]);
+]);*/
 'use strict';
 
 // Setting up route
@@ -109,6 +116,8 @@ angular.module('articles').controller('ArticlesController', ['$scope', '$statePa
 				$scope.error = errorResponse.data.message;
 			});
 		};
+		
+		var ss;
 
 		$scope.remove = function(article) {
 			if (article) {
@@ -198,10 +207,43 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 'use strict';
 
 
-angular.module('core').controller('HomeController', ['$scope', 'Authentication',
-	function($scope, Authentication) {
+angular.module('core').controller('HomeController', ['$scope', '$http', 'Authentication', 'Users', 'UserTool',
+	function($scope, $http, Authentication, Users, UserTool) {
 		// This provides Authentication context.
 		$scope.authentication = Authentication;
+		
+		$scope.userList = Users.query();
+		
+		$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+		
+		//$scope.toggleAvailability = SettingsController.toggleAvailability();
+		$scope.toggleAvailability = function() {
+			UserTool.toggleAvailability(function(stat) {
+				console.log(stat);
+				$scope.authentication.user.available = stat;
+				$scope.reloadList();
+			});
+		};
+		
+		$scope.reloadList = function() {
+			console.log('reload');
+			$scope.userList = Users.query();
+		};
+		
+		$scope.coordToString = function(stat) {
+			return stat.latitude + ',' + stat.longitude;
+		};
+		
+		if(Authentication.user && Authentication.user.actualPosition)
+			$scope.positionString = $scope.coordToString(Authentication.user.actualPosition);
+		
+		$scope.setPos = function() {
+			UserTool.setPosition($scope.positionString, function(ret) {
+				$scope.positionString = $scope.coordToString(ret);
+				$scope.reloadList();
+			});
+		};
+
 	}
 ]);
 'use strict';
@@ -372,6 +414,119 @@ angular.module('core').service('Menus', [
 ]);
 'use strict';
 
+// Configuring the Articles module
+angular.module('parties').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Soirees', 'parties', 'dropdown', '/parties(/create)?');
+		Menus.addSubMenuItem('topbar', 'parties', 'Liste', 'parties');
+		Menus.addSubMenuItem('topbar', 'parties', 'Creer soiree', 'parties/create');
+	}
+]);
+'use strict';
+
+// Setting up route
+angular.module('parties').config(['$stateProvider',
+	function($stateProvider) {
+		// parties state routing
+		$stateProvider.
+		state('listParties', {
+			url: '/parties',
+			templateUrl: 'modules/parties/views/list-parties.client.view.html'
+		}).
+		state('createParties', {
+			url: '/parties/create',
+			templateUrl: 'modules/parties/views/create-party.client.view.html'
+		}).
+		state('viewParty', {
+			url: '/parties/:partyId',
+			templateUrl: 'modules/parties/views/view-party.client.view.html'
+		}).
+		state('editParty', {
+			url: '/parties/:partyId/edit',
+			templateUrl: 'modules/parties/views/edit-party.client.view.html'
+		}).
+		state('askParty', {
+			url: '/parties/:partyId/ask',
+			templateUrl: 'modules/parties/views/ask-party.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+angular.module('parties').controller('PartiesController', ['$scope', '$stateParams', '$location', 'Authentication', 'Parties',
+	function($scope, $stateParams, $location, Authentication, Parties) {
+		$scope.authentication = Authentication;
+
+		$scope.create = function() {
+			var party = new Parties({
+				title: this.title,
+				content: this.content
+			});
+			party.$save(function(response) {
+				$location.path('parties/' + response._id);
+
+				$scope.title = '';
+				$scope.content = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+		
+
+		$scope.remove = function(party) {
+			if (party) {
+				party.$remove();
+
+				for (var i in $scope.parties) {
+					if ($scope.parties[i] === party) {
+						$scope.parties.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.party.$remove(function() {
+					$location.path('parties');
+				});
+			}
+		};
+
+		$scope.update = function() {
+			var party = $scope.party;
+
+			party.$update(function() {
+				$location.path('parties/' + party._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		$scope.find = function() {
+			$scope.parties = Parties.query();
+		};
+
+		$scope.findOne = function() {
+			$scope.party = Parties.get({
+				partyId: $stateParams.partyId
+			});
+		};
+	}
+]);
+'use strict';
+
+//Parties service used for communicating with the parties REST endpoints
+angular.module('parties').factory('Parties', ['$resource',
+	function($resource) {
+		return $resource('parties/:partyId', {
+			partyId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
 // Config HTTP Error Handling
 angular.module('users').config(['$httpProvider',
 	function($httpProvider) {
@@ -442,6 +597,10 @@ angular.module('users').config(['$stateProvider',
 		state('reset', {
 			url: '/password/reset/:token',
 			templateUrl: 'modules/users/views/password/reset-password.client.view.html'
+		}).
+		state('public-profile', {
+			url: '/public_profile/:id',
+			templateUrl: 'modules/users/views/user_profile.client.view.html'
 		});
 	}
 ]);
@@ -525,6 +684,38 @@ angular.module('users').controller('PasswordController', ['$scope', '$stateParam
 ]);
 'use strict';
 
+
+angular.module('core').controller('PublicProfileController', ['$scope', '$stateParams', '$http',
+	function($scope, $stateParams, $http) {
+		// This provides Authentication context.
+		$scope.userId = $stateParams.id;
+		
+		$scope.coordToString = function(stat) {
+			return stat.latitude + ',' + stat.longitude;
+		};
+		
+		$http.get('users/'+ $stateParams.id).then(function(res) {
+			$scope.user = res.data[0];
+			$scope.positionString = $scope.coordToString($scope.user.actualPosition);
+		});
+		
+		$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+
+
+		/*var User = $resource('/users/:userId');
+		$scope.user = User.query({userId: $stateParams.id})[0];
+		
+		
+		$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+		
+		$scope.test = function() {
+			
+			console.log($scope.user);
+		}*/
+	}
+]);
+'use strict';
+
 angular.module('users').controller('SettingsController', ['$scope', '$http', '$location', 'Users', 'Authentication',
 	function($scope, $http, $location, Users, Authentication) {
 		$scope.user = Authentication.user;
@@ -592,6 +783,7 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 				$scope.error = response.message;
 			});
 		};
+		
 	}
 ]);
 'use strict';
@@ -618,5 +810,38 @@ angular.module('users').factory('Users', ['$resource',
 				method: 'PUT'
 			}
 		});
+	}
+]);
+'use strict';
+
+// Authentication service for user variables
+angular.module('users').factory('UserTool', ['$http',
+	function($http) {
+		var tool = {};
+
+		tool.toggleAvailability = function(call) {
+			$http.put('/users/toggleAvailability').success(function(response) {
+				call(response);
+			}).error(function(response) {
+				call('error');
+			});
+		};
+		
+		tool.setPosition = function(pos, call) {
+			
+			var LatLng = pos.split(',');
+			var Lat = parseFloat(LatLng[0]);
+			var Lng = parseFloat(LatLng[1]);
+			var data = {
+				position : { latitude :Lat, longitude: Lng }
+			};
+			$http.put('/users/updatePosition', data).success(function(response) {
+				call(response);
+			}).error(function(response) {
+				call('error');
+			});
+		};
+
+		return tool;
 	}
 ]);

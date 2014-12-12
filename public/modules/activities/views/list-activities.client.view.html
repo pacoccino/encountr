@@ -25,7 +25,7 @@
 					</a>
 					<a class="btn btn-success" 
 					ng-if="activity.participants.indexOf(authentication.user._id) === -1" 
-					ng-click="participate(activity._id)">
+					ng-click="participate(activity)">
 						Participate
 					</a>		
 					<a class="btn btn-success" 
@@ -56,15 +56,10 @@
 					<a class="btn btn-primary" href="/#!/activities/{{activity._id}}">
 						Informations
 					</a>
-					<a class="btn btn-success" 
-					ng-if="activity.participants.indexOf(authentication.user._id) === -1" 
-					ng-click="participate(activity._id)">
-						Participate
-					</a>		
-					<a class="btn btn-success" 
+					<a class="btn btn-warning" 
 					ng-if="activity.participants.indexOf(authentication.user._id) != -1" 
 					disabled>
-						Participating
+						Participated
 					</a>
 				</div>
 			</div>

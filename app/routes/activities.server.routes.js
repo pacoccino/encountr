@@ -14,7 +14,7 @@ module.exports = function(app) {
 
 	app.route('/activities/:activityId')
 		.get(activities.read)
-		.put(users.requiresLogin, activities.hasAuthorization, activities.update)
+		.put(users.requiresLogin, activities.update)
 		.delete(users.requiresLogin, activities.hasAuthorization, activities.delete);
 
 	// Finish by binding the article middleware

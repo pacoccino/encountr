@@ -97,8 +97,6 @@ angular.module('activities').filter('filterOld', function() {
         
         angular.forEach(items, function(item){
         	var d = new Date(item.date);
-        	console.log(d.getTime());
-        	console.log(Date.now());
             if(d.getTime() > Date.now()){
               retn.push(item); 
             }
@@ -114,8 +112,6 @@ angular.module('activities').filter('filterNew', function() {
         
         angular.forEach(items, function(item){
         	var d = new Date(item.date);
-        	console.log(d.getTime());
-        	console.log(Date.now());
             if(d.getTime() <= Date.now()){
               retn.push(item); 
             }

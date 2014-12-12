@@ -1,5 +1,5 @@
 <section data-ng-controller="HomeController">
-	<h1>Meet other travelers around the world !</h1>
+	<h1 class="text-center">Meet other travelers around the world !</h1>
 	
 	
 <div data-ng-show="authentication.user">
@@ -13,7 +13,7 @@
 	        <strong><span data-ng-bind="authentication.user.displayName"></span></strong><br/>
 	        <a href="/#!/settings/profile">Edit profile</a><br/><br/>
 	        <form class="form-group has-warning">
-	        	<label for="position"  class="control-label">My position :</label>
+	        	<label for="position"  class="control-label">My location :</label>
 	        	<div class="input-group">
 	        		<input type="text" id="position" class="form-control" placeHolder="No position set yet" data-ng-model="positionString"></input>
 	        		<span class="input-group-btn">
@@ -26,7 +26,8 @@
 	    <div class="col-md-2">
 	        
 	        <form ng-submit="toggleAvailability()">
-               <button class="btn" ng-class="authentication.user.available ? 'btn-success' : 'btn-danger'" type="submit" ng-bind="authentication.user.available ? 'Available' : 'Unavailable'"></button>
+               <button class="btn" ng-class="authentication.user.available ? 'btn-success' : 'btn-danger'" type="submit" ng-bind="authentication.user.available"></button>
+               <button class="btn" ng-class="authentication.user.available ? 'btn-success' : 'btn-danger'" type="submit" ng-bind="authentication.user.available | availabler"></button>
             </form>
 	    </div>
 	</div>
@@ -60,6 +61,10 @@
 	
 </div>
 <div data-ng-hide="authentication.user">
-	Please connect.
+	<div class="home-img" align="center">
+		<img src="/modules/core/img/home.jpg"/><br/><br/>
+		<a href="/#!/signin" class="btn btn-primary">Sign-in</a>
+		<a href="/#!/signup" class="btn btn-success">Sign-up</a>
+	</div>
 </div>
 </section>

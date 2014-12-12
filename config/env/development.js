@@ -2,6 +2,7 @@
 
 module.exports = {
 	db: 'mongodb://rencontr:pw@proximus.modulusmongo.net:27017/doRove2n',
+	//db: 'mongodb://localhost:27017/encountr',
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
 		format: 'dev',

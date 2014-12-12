@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 /**
  * Article Schema
  */
-var PartySchema = new Schema({
+var ActivitySchema = new Schema({
 	created: {
 		type: Date,
 		default: Date.now
@@ -25,10 +25,19 @@ var PartySchema = new Schema({
 		default: '',
 		trim: true
 	},
+	location: {
+		latitude: { type: String, default:'0' },
+		longitude: { type: String, default:'0' }
+	},
+	date: {
+		type: Date,
+		default: Date.now
+	},
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
-	}
+	},
+	participants: []
 });
 
-mongoose.model('Party', PartySchema);
+mongoose.model('Activity', ActivitySchema);

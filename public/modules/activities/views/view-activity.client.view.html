@@ -1,0 +1,53 @@
+<section data-ng-controller="ActivitiesController" data-ng-init="findOne()">
+	<div class="page-header">
+	<a href="/#!/activities">&larr; Back to list</a>
+		<h1 data-ng-bind="activity.title"></h1>
+		<span><strong>Date: </strong>{{activity.date | date:fullDate}}</span>
+	</div>
+	<div class="pull-right" data-ng-show="authentication.user._id == activity.user._id">
+		<a class="btn btn-success" 
+		ng-if="activity.participants.indexOf(authentication.user._id) === -1" 
+		ng-click="participate(activity._id)">
+			Participate
+		</a>		
+		<a class="btn btn-success" 
+		ng-if="activity.participants.indexOf(authentication.user._id) != -1" 
+		disabled>
+			Participating
+		</a>
+		<a class="btn btn-primary" href="/#!/activities/{{activity._id}}/edit">
+			<i class="glyphicon glyphicon-edit"></i>
+		</a>
+		<a class="btn btn-primary" data-ng-click="remove();">
+			<i class="glyphicon glyphicon-trash"></i>
+		</a>
+	</div>
+	<small>
+		<em class="text-muted">
+			Posted on
+			<span data-ng-bind="activity.created | date:'mediumDate'"></span>
+			by
+			<span data-ng-bind="activity.user.displayName"></span>
+		</em>
+	</small>
+	<p class="lead" data-ng-bind="activity.content"></p>
+<style>
+	.angular-google-map-container { height: 400px; }
+</style>
+<div class="col-md-8">
+	<div class="map-area">
+		<ui-gmap-google-map center='activity.location' zoom='8'>
+			<ui-gmap-marker 
+				coords='activity.location' 
+				idKey='0'>
+			</ui-gmap-marker>
+		</ui-gmap-google-map>
+	</div>
+</div>
+<div class="col-md-4">
+		    <h4>List of people participating :</h4>
+			<ul>
+			    <li data-ng-repeat="user in activity.participants"><a ng-href="/#!/public_profile/{{user._id}}">{{user}}</a></li>
+			</ul>
+</div>
+</section>

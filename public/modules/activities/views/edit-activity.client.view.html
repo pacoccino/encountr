@@ -1,0 +1,56 @@
+<section data-ng-controller="ActivitiesController" data-ng-init="findOne()">
+	<div class="page-header">
+		<a href="/#!/activities/{{activity._id}}">&larr; Back to activity</a>
+		<h1>Edit activity</h1>
+	</div>
+	<div class="col-md-12">
+		<form name="activityForm" class="form-horizontal" data-ng-submit="update(activityForm.$valid)" novalidate>
+			<fieldset>
+				<div class="form-group" ng-class="{ 'has-error' : submitted && activityForm.title.$invalid}">
+					<label class="control-label" for="title">Title</label>
+					<div class="controls">
+						<input name="title" type="text" data-ng-model="activity.title" id="title" class="form-control" placeholder="Title" required>
+					</div>
+					<div ng-show="submitted && activityForm.title.$invalid" class="help-block">
+						<p ng-show="activityForm.title.$error.required" class="text-danger">Title is required</p>
+					</div>
+				</div>
+<script>				
+$(function() {
+$( "#date" ).datepicker();
+$( "#date" ).datepicker("option", "dateFormat", "yy-mm-dd");
+});
+</script>
+ <link rel="stylesheet" href="lib/jquery-ui/themes/flick/jquery-ui.css">
+
+				<div class="form-group">
+					<label class="control-label" for="date">Date</label>
+					<div class="controls">
+						<input name="date" type="date" data-ng-model="activity.date" id="date" class="form-control" placeholder="yyyy-mm-dd" required>
+					</div>
+				</div>
+				<div class="form-group" ng-class="{ 'has-error': activityForm.location.$dirty && activityForm.location.$invalid }">
+					<label class="control-label" for="location">Location</label>
+					<div class="controls">
+						<input name="location" type="text" data-ng-model="locationString" id="location" class="form-control" placeholder="45,-73" required>
+					</div>
+				</div>
+				<div class="form-group" ng-class="{ 'has-error' : submitted && activityForm.content.$invalid}">
+					<label class="control-label" for="content">Description</label>
+					<div class="controls">
+						<textarea name="content" data-ng-model="activity.content" id="content" class="form-control" cols="30" rows="10" placeholder="Content" required></textarea>
+					</div>
+					<div ng-show="submitted && activityForm.content.$invalid" class="help-block">
+						<p ng-show="activityForm.content.$error.required" class="text-danger">Description is required</p>
+					</div>
+				</div>
+				<div class="form-group">
+					<input type="submit" value="Update" class="btn btn-default">
+				</div>
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+			</fieldset>
+		</form>
+	</div>
+</section>

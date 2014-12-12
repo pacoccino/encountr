@@ -74,7 +74,7 @@ var UserSchema = new Schema({
 	},
 	profilePicture: {
 		type: String,
-		default:''
+		default:'/modules/users/img/defaultpicture.png'
 	},
 	
 	salt: {

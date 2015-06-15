@@ -1,0 +1,21 @@
+<templateSet group="AngularJS ">
+  <template name="cl" value="console.log($variable$);&#10;$END$" description="Console.log" toReformat="false" toShortenFQNames="true">
+    <variable name="variable" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="JAVA_SCRIPT" value="true" />
+      <option name="JS_EXPRESSION" value="true" />
+      <option name="JSX_HTML" value="true" />
+      <option name="JS_STATEMENT" value="true" />
+    </context>
+  </template>
+  <template name="it" value="it('$role$', function() {&#10;    $code$&#10;});&#10;$END$" description="Karma it()" toReformat="false" toShortenFQNames="true">
+    <variable name="role" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="code" expression="" defaultValue="" alwaysStopAt="true" />
+    <context />
+  </template>
+  <template name="de" value="describe('$what$', function() {&#10;    $code$&#10;});" description="karma Describe" toReformat="false" toShortenFQNames="true">
+    <variable name="what" expression="" defaultValue="" alwaysStopAt="true" />
+    <variable name="code" expression="" defaultValue="" alwaysStopAt="true" />
+    <context />
+  </template>
+</templateSet>

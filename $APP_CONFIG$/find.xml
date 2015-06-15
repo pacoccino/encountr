@@ -1,0 +1,21 @@
+<application>
+  <component name="FindSettings">
+    <option name="customScope" value="angular" />
+    <option name="defaultScopeName" value="angular" />
+    <option name="SEARCH_SCOPE" value="angular" />
+    <recentFileMasks>
+      <mask>*.properties</mask>
+      <mask>*.jsp</mask>
+      <mask>*.xml</mask>
+      <mask>*.java</mask>
+      <mask>*.as</mask>
+      <mask>*.mxml</mask>
+      <mask>*.css</mask>
+      <mask>*.*</mask>
+      <mask>*.less</mask>
+      <mask>*.htm</mask>
+      <mask>*.html</mask>
+      <mask>*.js</mask>
+    </recentFileMasks>
+  </component>
+</application>
